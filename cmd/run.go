@@ -25,10 +25,10 @@ The target is the name of the justfile target to execute.
 The optional @path argument specifies a subdirectory within the repository.
 Additional arguments are passed through to the justfile target.`,
 	Example: `  j run build                      # Run build target
-  j run dev @pages                # Run dev target in pages directory
-  j run shell @machine-router foo # Run shell target with 'foo' argument
+  j run dev @frontend             # Run dev target in frontend directory
+  j run test @backend api         # Run test target in backend directory with 'api' argument
   j build                         # Shorthand (run is default command)
-  j dev @pages                    # Shorthand syntax`,
+  j dev @frontend                 # Shorthand syntax`,
 	Args: cobra.MinimumNArgs(1),
 	RunE: runTarget,
 }

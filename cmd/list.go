@@ -34,7 +34,7 @@ var listCmd = &cobra.Command{
 Without arguments, lists targets from the current directory or repository root.
 With a @path argument, lists targets from that specific directory.`,
 	Example: `  j list                          # List targets in current directory or repo root
-  j list @pages                  # List targets in pages directory
+  j list @frontend               # List targets in frontend directory
   j list --format json           # Output as JSON
   j list --recursive             # List targets from all justfiles in repo
   j -l                           # Short flag for list (just compatibility)`,

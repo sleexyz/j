@@ -39,10 +39,10 @@ running targets from any directory using the @path syntax.`,
 	Version: version,
 	Args:    cobra.MinimumNArgs(0),
 	Example: `  j build                           # Run build target in current directory or repo root
-  j dev @pages                     # Run dev target in pages directory
-  j shell @machine-router foo      # Run shell target with 'foo' argument
+  j dev @frontend                  # Run dev target in frontend directory
+  j test @backend api              # Run test target in backend directory with 'api' argument
   j list                           # List all available targets
-  j list @modal                    # List targets in modal directory`,
+  j list @service                  # List targets in service directory`,
 }
 
 var runCmd = &cobra.Command{
@@ -54,10 +54,10 @@ The target is the name of the justfile target to execute.
 The optional @path argument specifies a subdirectory within the repository.
 Additional arguments are passed through to the justfile target.`,
 	Example: `  j run build                      # Run build target
-  j run dev @pages                # Run dev target in pages directory
-  j run shell @machine-router foo # Run shell target with 'foo' argument
+  j run dev @frontend             # Run dev target in frontend directory
+  j run test @backend api         # Run test target in backend directory with 'api' argument
   j build                         # Shorthand (run is default command)
-  j dev @pages                    # Shorthand syntax`,
+  j dev @frontend                 # Shorthand syntax`,
 	Args: cobra.MinimumNArgs(1),
 	RunE: runTarget,
 }
@@ -70,7 +70,7 @@ var listCmd = &cobra.Command{
 Without arguments, lists targets from the current directory or repository root.
 With a @path argument, lists targets from that specific directory.`,
 	Example: `  j list                          # List targets in current directory or repo root
-  j list @pages                  # List targets in pages directory
+  j list @frontend               # List targets in frontend directory
   j list --format json           # Output as JSON
   j list --recursive             # List targets from all justfiles in repo
   j -l                           # Short flag for list (just compatibility)`,

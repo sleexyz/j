@@ -22,10 +22,10 @@ running targets from any directory using the @path syntax.`,
 	Version: version,
 	Args: cobra.MinimumNArgs(0),
 	Example: `  j build                           # Run build target in current directory or repo root
-  j dev @pages                     # Run dev target in pages directory
-  j shell @machine-router foo      # Run shell target with 'foo' argument
+  j dev @frontend                  # Run dev target in frontend directory
+  j test @backend api              # Run test target in backend directory with 'api' argument
   j list                           # List all available targets
-  j list @modal                    # List targets in modal directory`,
+  j list @service                  # List targets in service directory`,
 }
 
 func init() {
