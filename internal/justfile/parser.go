@@ -3,8 +3,6 @@ package justfile
 import (
 	"bufio"
 	"os"
-	"os/exec"
-	"path/filepath"
 	"strings"
 )
 
@@ -17,48 +15,8 @@ type Target struct {
 
 // GetTargets extracts targets from a justfile using `just --list`
 func GetTargets(justfilePath string) ([]Target, error) {
-	dir := filepath.Dir(justfilePath)
-	
-	cmd := exec.Command("just", "--list", "--unsorted")
-	cmd.Dir = dir
-	
-	output, err := cmd.Output()
-	if err != nil {
-		return nil, err
-	}
-
-	var targets []Target
-	scanner := bufio.NewScanner(strings.NewReader(string(output)))
-	
-	// Skip the first line (header)
-	scanner.Scan()
-	
-	for scanner.Scan() {
-		line := strings.TrimSpace(scanner.Text())
-		if line == "" {
-			continue
-		}
-		
-		// Parse target line: "target_name    # description"
-		parts := strings.Fields(line)
-		if len(parts) == 0 {
-			continue
-		}
-		
-		target := Target{
-			Name:         parts[0],
-			JustfilePath: justfilePath,
-		}
-		
-		// Look for description after #
-		if idx := strings.Index(line, "#"); idx != -1 {
-			target.Description = strings.TrimSpace(line[idx+1:])
-		}
-		
-		targets = append(targets, target)
-	}
-	
-	return targets, scanner.Err()
+	// Always fall back to file parsing for simplicity and reliability
+	return GetTargetsFromFile(justfilePath)
 }
 
 // GetTargetsFromFile parses a justfile directly (fallback method)
@@ -82,11 +40,20 @@ func GetTargetsFromFile(justfilePath string) ([]Target, error) {
 		
 		// Look for target definitions (lines ending with :)
 		if strings.HasSuffix(line, ":") && !strings.Contains(line, "=") {
-			targetName := strings.TrimSuffix(line, ":")
-			targetName = strings.TrimSpace(targetName)
+			// Handle targets with parameters like "target param1 param2:"
+			targetLine := strings.TrimSuffix(line, ":")
+			targetLine = strings.TrimSpace(targetLine)
 			
-			// Skip if it contains spaces (probably not a simple target)
-			if !strings.Contains(targetName, " ") {
+			// Extract just the target name (first word)
+			parts := strings.Fields(targetLine)
+			if len(parts) > 0 {
+				targetName := parts[0]
+				
+				// Skip internal/private targets that start with _
+				if strings.HasPrefix(targetName, "_") {
+					continue
+				}
+				
 				targets = append(targets, Target{
 					Name:         targetName,
 					JustfilePath: justfilePath,

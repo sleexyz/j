@@ -2,14 +2,14 @@
 _check-clean:
 	#!/usr/bin/env bash
 	if git status --porcelain . | grep -qE "^.M|^\?\?"; then
-		echo "Error: There are unstaged changes in nix/j/. Please git add them first."
+		echo "Error: There are unstaged changes. Please git add them first."
 		git status --porcelain .
 		exit 1
 	fi
 
 # Install j globally via nix profile
 install: _check-clean
-	nix profile install ".#j"
+	nix profile install .
 	echo "j installed! Start a new zsh session for new completions." 
 
 # Enter development shell
@@ -18,7 +18,7 @@ dev:
 
 # Remove j from global profile
 uninstall:
-	nix profile remove "nix/j"
+	nix profile remove "j"
 
 # Reinstall j globally (uninstall + install)
 reinstall: _check-clean uninstall install
