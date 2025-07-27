@@ -1,0 +1,16 @@
+#compdef j
+
+# Dynamic zsh completion for j - loads completion on demand
+# This avoids materializing a static completion file
+
+# Ensure compinit is loaded
+autoload -U compinit
+compinit
+
+# Load dynamic completion from j binary
+if command -v j >/dev/null 2>&1; then
+  source <(j completion zsh)
+else
+  # Fallback if j is not in PATH
+  return 1
+fi
