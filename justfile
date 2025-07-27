@@ -38,8 +38,8 @@ _update-version:
 	#!/usr/bin/env bash
 	set -euo pipefail
 	
-	# Get current version from j-go.nix
-	current_version=$(grep 'version = ' j-go.nix | head -1 | sed 's/.*"\(.*\)".*/\1/')
+	# Get current version from j.nix
+	current_version=$(grep 'version = ' j.nix | head -1 | sed 's/.*"\(.*\)".*/\1/')
 	echo "Current version: $current_version"
 	
 	# Bump patch version
@@ -51,10 +51,10 @@ _update-version:
 	new_version="$major.$minor.$new_patch"
 	echo "New version: $new_version"
 	
-	# Update version in j-go.nix (both places)
-	sed -i.bak "s/version = \"$current_version\"/version = \"$new_version\"/g" j-go.nix
-	sed -i.bak "s/-X main.version=$current_version/-X main.version=$new_version/g" j-go.nix
-	rm j-go.nix.bak
+	# Update version in j.nix (both places)
+	sed -i.bak "s/version = \"$current_version\"/version = \"$new_version\"/g" j.nix
+	sed -i.bak "s/-X main.version=$current_version/-X main.version=$new_version/g" j.nix
+	rm j.nix.bak
 	
 	# Sync dependencies
 	echo "Syncing Go dependencies..."

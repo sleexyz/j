@@ -15,7 +15,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        j = pkgs.callPackage ./j-go.nix { };
+        j = pkgs.callPackage ./j.nix { };
       in {
         packages = {
           default = j;

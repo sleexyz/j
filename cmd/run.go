@@ -99,19 +99,19 @@ func runTarget(cmd *cobra.Command, args []string) error {
 	originalArgs := findOriginalArgs(args)
 	
 	target := originalArgs[0]
-	var websimPath string
+	var repoPath string
 	var extraArgs []string
 	
 	// Parse arguments to separate target, path, and extra args
 	for i, arg := range originalArgs[1:] {
 		if strings.HasPrefix(arg, "@") {
-			websimPath = arg
+			repoPath = arg
 			// Everything after the path becomes extra args
 			if i+2 < len(originalArgs) {
 				extraArgs = originalArgs[i+2:]
 			}
 			break
-		} else if websimPath == "" {
+		} else if repoPath == "" {
 			// If no @path found yet, treat remaining args as extra args
 			extraArgs = originalArgs[1:]
 			break
@@ -127,15 +127,15 @@ func runTarget(cmd *cobra.Command, args []string) error {
 	var workingDir string
 	var justfilePath string
 	
-	if websimPath != "" {
+	if repoPath != "" {
 		// Handle @path syntax
-		if !strings.HasPrefix(websimPath, "@") {
-			return fmt.Errorf("path must start with @, got: %s", websimPath)
+		if !strings.HasPrefix(repoPath, "@") {
+			return fmt.Errorf("path must start with @, got: %s", repoPath)
 		}
 		
-		resolvedPath, err := repo.ResolveWebsimPath(websimPath, repoRoot)
+		resolvedPath, err := repo.ResolveRepoPath(repoPath, repoRoot)
 		if err != nil {
-			return fmt.Errorf("failed to resolve path %s: %w", websimPath, err)
+			return fmt.Errorf("failed to resolve path %s: %w", repoPath, err)
 		}
 		
 		workingDir = resolvedPath

@@ -32,10 +32,9 @@ type TargetInfo struct {
 
 var rootCmd = &cobra.Command{
 	Use:   "j [target] [@path] [args...]",
-	Short: "Modern justfile runner for monorepos",
-	Long: `j is a powerful command-line tool for running justfile targets in monorepos.
-It provides smart discovery of justfiles across your repository and supports
-running targets from any directory using the @path syntax.`,
+	Short: "Run justfile targets from anywhere in your repo",
+	Long: `j runs justfile targets from anywhere in your repository.
+Use @path syntax to run targets in specific directories.`,
 	Version: version,
 	Args:    cobra.MinimumNArgs(0),
 	Example: `  j build                           # Run build target in current directory or repo root
@@ -183,7 +182,7 @@ func init() {
 	listCmd.Flags().BoolVarP(&recursive, "recursive", "r", false, "include subdirectories")
 	listCmd.ValidArgsFunction = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		if len(args) == 0 {
-			return completion.CompleteWebsimPaths(cmd, args, toComplete)
+			return completion.CompleteRepoPaths(cmd, args, toComplete)
 		}
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
@@ -260,19 +259,19 @@ func runTarget(cmd *cobra.Command, args []string) error {
 	originalArgs := findOriginalArgs(args)
 
 	target := originalArgs[0]
-	var websimPath string
+	var repoPath string
 	var extraArgs []string
 
 	// Parse arguments to separate target, path, and extra args
 	for i, arg := range originalArgs[1:] {
 		if strings.HasPrefix(arg, "@") {
-			websimPath = arg
+			repoPath = arg
 			// Everything after the path becomes extra args
 			if i+2 < len(originalArgs) {
 				extraArgs = originalArgs[i+2:]
 			}
 			break
-		} else if websimPath == "" {
+		} else if repoPath == "" {
 			// If no @path found yet, treat remaining args as extra args
 			extraArgs = originalArgs[1:]
 			break
@@ -288,15 +287,15 @@ func runTarget(cmd *cobra.Command, args []string) error {
 	var workingDir string
 	var justfilePath string
 
-	if websimPath != "" {
+	if repoPath != "" {
 		// Handle @path syntax
-		if !strings.HasPrefix(websimPath, "@") {
-			return fmt.Errorf("path must start with @, got: %s", websimPath)
+		if !strings.HasPrefix(repoPath, "@") {
+			return fmt.Errorf("path must start with @, got: %s", repoPath)
 		}
 
-		resolvedPath, err := repo.ResolveWebsimPath(websimPath, repoRoot)
+		resolvedPath, err := repo.ResolveRepoPath(repoPath, repoRoot)
 		if err != nil {
-			return fmt.Errorf("failed to resolve path %s: %w", websimPath, err)
+			return fmt.Errorf("failed to resolve path %s: %w", repoPath, err)
 		}
 
 		workingDir = resolvedPath
@@ -338,14 +337,14 @@ func listTargets(cmd *cobra.Command, args []string) error {
 
 	if len(args) == 1 {
 		// List targets from specific path
-		websimPath := args[0]
-		if !strings.HasPrefix(websimPath, "@") {
-			return fmt.Errorf("path must start with @, got: %s", websimPath)
+		repoPath := args[0]
+		if !strings.HasPrefix(repoPath, "@") {
+			return fmt.Errorf("path must start with @, got: %s", repoPath)
 		}
 
-		resolvedPath, err := repo.ResolveWebsimPath(websimPath, repoRoot)
+		resolvedPath, err := repo.ResolveRepoPath(repoPath, repoRoot)
 		if err != nil {
-			return fmt.Errorf("failed to resolve path %s: %w", websimPath, err)
+			return fmt.Errorf("failed to resolve path %s: %w", repoPath, err)
 		}
 
 		targets, err = getTargetsFromDirectory(resolvedPath)

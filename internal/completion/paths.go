@@ -10,8 +10,8 @@ import (
 	"github.com/sleexyz/j/internal/repo"
 )
 
-// CompleteWebsimPaths provides completion for @path arguments
-func CompleteWebsimPaths(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+// CompleteRepoPaths provides completion for @path arguments
+func CompleteRepoPaths(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	repoRoot, err := repo.FindRepoRoot()
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveError
@@ -72,8 +72,8 @@ func CompleteWebsimPaths(cmd *cobra.Command, args []string, toComplete string) (
 				return nil
 			}
 
-			websimPath := "@" + relPath
-			allPaths = append(allPaths, websimPath)
+			repoPath := "@" + relPath
+			allPaths = append(allPaths, repoPath)
 		}
 
 		return nil
@@ -129,8 +129,8 @@ func CompletePathsWithTarget(cmd *cobra.Command, args []string, toComplete strin
 			continue
 		}
 		
-		websimPath := "@" + relPath
-		allPaths = append(allPaths, websimPath)
+		repoPath := "@" + relPath
+		allPaths = append(allPaths, repoPath)
 	}
 
 	// Use fuzzy matching instead of prefix matching

@@ -15,10 +15,9 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "j [target] [@path] [args...]",
-	Short: "Modern justfile runner for monorepos",
-	Long: `j is a powerful command-line tool for running justfile targets in monorepos.
-It provides smart discovery of justfiles across your repository and supports
-running targets from any directory using the @path syntax.`,
+	Short: "Run justfile targets from anywhere in your repo",
+	Long: `j runs justfile targets from anywhere in your repository.
+Use @path syntax to run targets in specific directories.`,
 	Version: version,
 	Args: cobra.MinimumNArgs(0),
 	Example: `  j build                           # Run build target in current directory or repo root

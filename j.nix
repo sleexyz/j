@@ -1,4 +1,4 @@
-# nix/j/j-go.nix
+# nix/j/j.nix
 { lib
 , buildGoModule
 , installShellFiles
@@ -57,8 +57,8 @@ EOF
   ];
 
   meta = with lib; {
-    description = "Modern justfile runner for monorepos";
-    homepage = "https://github.com/websim/j";
+    description = "Run justfile targets from anywhere in your repo";
+    homepage = "https://github.com/sleexyz/j";
     license = licenses.mit;
     maintainers = [ ];
     mainProgram = "j";

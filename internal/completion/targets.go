@@ -20,10 +20,10 @@ func CompleteTargets(cmd *cobra.Command, args []string, toComplete string) ([]st
 	}
 
 	// Check if there's a @path argument
-	websimPath := ""
+	repoPath := ""
 	for _, arg := range args {
 		if strings.HasPrefix(arg, "@") {
-			websimPath = arg
+			repoPath = arg
 			break
 		}
 	}
@@ -35,9 +35,9 @@ func CompleteTargets(cmd *cobra.Command, args []string, toComplete string) ([]st
 
 	var targets []justfile.Target
 
-	if websimPath != "" {
+	if repoPath != "" {
 		// If a specific websim path is provided, only get targets from that path
-		resolvedPath, err := repo.ResolveWebsimPath(websimPath, repoRoot)
+		resolvedPath, err := repo.ResolveRepoPath(repoPath, repoRoot)
 		if err != nil {
 			return nil, cobra.ShellCompDirectiveError
 		}
@@ -88,9 +88,9 @@ func CompleteTargets(cmd *cobra.Command, args []string, toComplete string) ([]st
 					completions = append(completions, targetName)
 					continue
 				}
-				websimPath := "@" + relPath
+				repoPath := "@" + relPath
 				// Show as "target (path)" so fuzzy matching can find both target name and path
-				completion := targetName + " (" + websimPath + ")"
+				completion := targetName + " (" + repoPath + ")"
 				completions = append(completions, completion)
 			}
 		}

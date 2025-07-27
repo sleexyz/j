@@ -49,7 +49,7 @@ func init() {
 	// Set up completion for path argument
 	listCmd.ValidArgsFunction = func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		if len(args) == 0 {
-			return completion.CompleteWebsimPaths(cmd, args, toComplete)
+			return completion.CompleteRepoPaths(cmd, args, toComplete)
 		}
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
@@ -65,14 +65,14 @@ func listTargets(cmd *cobra.Command, args []string) error {
 
 	if len(args) == 1 {
 		// List targets from specific path
-		websimPath := args[0]
-		if !strings.HasPrefix(websimPath, "@") {
-			return fmt.Errorf("path must start with @, got: %s", websimPath)
+		repoPath := args[0]
+		if !strings.HasPrefix(repoPath, "@") {
+			return fmt.Errorf("path must start with @, got: %s", repoPath)
 		}
 
-		resolvedPath, err := repo.ResolveWebsimPath(websimPath, repoRoot)
+		resolvedPath, err := repo.ResolveRepoPath(repoPath, repoRoot)
 		if err != nil {
-			return fmt.Errorf("failed to resolve path %s: %w", websimPath, err)
+			return fmt.Errorf("failed to resolve path %s: %w", repoPath, err)
 		}
 
 		targets, err = getTargetsFromDirectory(resolvedPath)

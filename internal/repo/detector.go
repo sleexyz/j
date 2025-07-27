@@ -30,14 +30,14 @@ func IsGitRepo() bool {
 	return cmd.Run() == nil
 }
 
-// ResolveWebsimPath resolves @path/to/dir to actual filesystem path
-func ResolveWebsimPath(websimPath, repoRoot string) (string, error) {
+// ResolveRepoPath resolves @path/to/dir to actual filesystem path
+func ResolveRepoPath(repoPath, repoRoot string) (string, error) {
 	// Remove @ prefix
-	if strings.HasPrefix(websimPath, "@") {
-		websimPath = strings.TrimPrefix(websimPath, "@")
+	if strings.HasPrefix(repoPath, "@") {
+		repoPath = strings.TrimPrefix(repoPath, "@")
 	}
 
-	fullPath := filepath.Join(repoRoot, websimPath)
+	fullPath := filepath.Join(repoRoot, repoPath)
 	
 	// Check if directory exists
 	if _, err := os.Stat(fullPath); os.IsNotExist(err) {
