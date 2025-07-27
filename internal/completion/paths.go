@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/websim/j/internal/justfile"
-	"github.com/websim/j/internal/repo"
+	"github.com/sleexyz/j/internal/justfile"
+	"github.com/sleexyz/j/internal/repo"
 )
 
 // CompleteWebsimPaths provides completion for @path arguments

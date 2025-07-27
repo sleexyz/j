@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/websim/j/internal/completion"
+	"github.com/sleexyz/j/internal/completion"
 )
 
 var (
