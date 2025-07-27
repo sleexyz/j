@@ -36,44 +36,13 @@ func RunTarget(justfilePath, target string, args []string, verbose bool) error {
 	return cmd.Run()
 }
 
-// runShellTarget handles the special shell command with su headless behavior
+// runShellTarget handles the special shell command by passing args directly to justfile
 func runShellTarget(justfilePath string, args []string, verbose bool) error {
 	dir := filepath.Dir(justfilePath)
 	
-	// Parse args to find -c flag and session_id
-	var sessionID string
-	var cmdToRun string
-	var cFlagIndex = -1
-	
-	// Find session_id (first non-flag argument)
-	for _, arg := range args {
-		if !strings.HasPrefix(arg, "-") {
-			sessionID = arg
-			break
-		}
-	}
-	
-	// Find -c flag and extract command
-	for i, arg := range args {
-		if arg == "-c" && i+1 < len(args) {
-			cFlagIndex = i
-			cmdToRun = args[i+1]
-			break
-		}
-	}
-	
-	if sessionID == "" {
-		return fmt.Errorf("session_id is required for shell command")
-	}
-	
-	var justArgs []string
-	if cFlagIndex >= 0 {
-		// Build justfile args: session_id followed by 'su headless -c "command"'
-		justArgs = []string{"shell", sessionID, "su", "headless", "-c", cmdToRun}
-	} else {
-		// Default: run 'su headless'
-		justArgs = []string{"shell", sessionID, "su", "headless"}
-	}
+	// Simply pass all args directly to the justfile shell target
+	// The justfile will handle parsing session_id and -c flag
+	justArgs := append([]string{"shell"}, args...)
 	
 	if verbose {
 		fmt.Printf("Running: cd %s && just %v\n", dir, justArgs)
