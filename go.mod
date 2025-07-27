@@ -1,4 +1,4 @@
-module github.com/websim/j
+module github.com/sleexyz/j
 
 go 1.23
 

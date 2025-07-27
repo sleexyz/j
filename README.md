@@ -2,6 +2,16 @@
 
 `j` is a simple wrapper for running `just` commands anywhere in a monorepo.
 
+## Installation
+
+```bash
+# via nix
+nix profile install github:sleexyz/j
+
+# via go
+go install github.com/sleexyz/j@latest
+```
+
 ## Example:
 
 input: `j build @my-service`
