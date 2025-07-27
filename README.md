@@ -5,6 +5,7 @@
 ## Example:
 
 input: `j build @my-service`
+
 output: `(cd $MONOREPO_ROOT/my-service; just build)`
 
 ## Why?
