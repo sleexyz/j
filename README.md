@@ -4,8 +4,8 @@
 
 ## Example:
 
-input: `j deploy @modal-sandbox-container`
-output: `(cd $MONOREPO_ROOT/modal-sandbox-container; just deploy)`
+input: `j build @my-service`
+output: `(cd $MONOREPO_ROOT/my-service; just build)`
 
 ## Why?
 
