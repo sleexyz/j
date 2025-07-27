@@ -12,11 +12,6 @@ import (
 func RunTarget(justfilePath, target string, args []string, verbose bool) error {
 	dir := filepath.Dir(justfilePath)
 	
-	// Special handling for shell command
-	if target == "shell" {
-		return runShellTarget(justfilePath, args, verbose)
-	}
-	
 	cmdArgs := append([]string{target}, args...)
 	
 	if verbose {
@@ -36,26 +31,6 @@ func RunTarget(justfilePath, target string, args []string, verbose bool) error {
 	return cmd.Run()
 }
 
-// runShellTarget handles the special shell command by passing args directly to justfile
-func runShellTarget(justfilePath string, args []string, verbose bool) error {
-	dir := filepath.Dir(justfilePath)
-	
-	// Simply pass all args directly to the justfile shell target
-	// The justfile will handle parsing session_id and -c flag
-	justArgs := append([]string{"shell"}, args...)
-	
-	if verbose {
-		fmt.Printf("Running: cd %s && just %v\n", dir, justArgs)
-	}
-	
-	cmd := exec.Command("just", justArgs...)
-	cmd.Dir = dir
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.Stdin = os.Stdin
-	
-	return cmd.Run()
-}
 
 // ValidateTarget checks if a target exists in the justfile
 func ValidateTarget(justfilePath, target string) error {
